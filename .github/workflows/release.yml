@@ -1,8 +1,10 @@
 name: Release
 
 on:
-  push: 
-    branches: ["master"]
+  push:
+    # run only against tags
+    tags:
+      - "*"
 
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages as well 
