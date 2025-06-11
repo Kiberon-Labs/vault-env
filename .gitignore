@@ -7,3 +7,5 @@ dist
 vault-env.exe
 # Quick testing 
 /.vault-env.yml
+# Added by goreleaser init:
+dist/
