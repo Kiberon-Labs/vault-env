@@ -1,0 +1,9 @@
+builds/*
+tests/**/backend.tf
+tests/**/.secrets.env
+dist
+*.env
+
+vault-env.exe
+# Quick testing 
+/.vault-env.yml

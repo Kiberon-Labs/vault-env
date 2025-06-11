@@ -1,0 +1,45 @@
+name: Release
+
+on:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+  push:
+    # run only against tags
+    tags:
+      - 'v*'
+
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages as well 
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+
+jobs:
+  binaries:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Fetch Go version
+        run: |
+          GO_VERSION=$(perl -ne 'print "$1\n" if /FROM golang:([0-9.]+)/' Dockerfile | head -n1)
+          [ -n "$GO_VERSION" ] || exit 1
+          echo "go_version=$GO_VERSION" >> $GITHUB_ENV
+      - name: Setup Go environment
+        uses: actions/setup-go@v3
+        with:
+          go-version: "1.23"
+
+      - name: Binaries Release
+        uses: goreleaser/goreleaser-action@v6
+        with:
+          distribution: goreleaser
+          version: ~> v2
+          args: release --clean
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
